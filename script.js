@@ -327,33 +327,47 @@
 
       const endung = d.datei.split(".").pop().toLowerCase();
 
-        if (
-          d.typ === "video" ||
-          ["mp4", "mov", "webm"].includes(endung)
-        ) { {
+        
+      if (
+        d.typ === "video" ||
+        ["mp4", "mov", "webm"].includes(endung)
+      ) {
         const v = document.createElement("video");
         v.controls = true;
         v.playsInline = true;
         v.preload = "metadata";
+
         if (d.poster) {
-          try { v.poster = await medium(d.poster); } catch { /* ohne Vorschaubild */ }
+          try {
+            v.poster = await medium(d.poster);
+          } catch {
+            /* ohne Vorschaubild */
+          }
           if (mein !== tokenLoesung) return;
         }
+
         v.src = url;
-        v.addEventListener("error", () => meldung("Das Video konnte nicht abgespielt werden."));
+        v.addEventListener("error", () =>
+          meldung("Das Video konnte nicht abgespielt werden.")
+        );
         medien.replaceChildren(v);
+
       } else {
         const img = document.createElement("img");
         img.alt = d.alt || "";
         img.src = url;
-        img.addEventListener("error", () => meldung("Das Foto konnte nicht angezeigt werden."));
+        img.addEventListener("error", () =>
+          meldung("Das Foto konnte nicht angezeigt werden.")
+        );
         medien.replaceChildren(img);
       }
-    } catch {
-      if (mein !== tokenLoesung) return;
-      meldung("Die Datei konnte nicht geladen werden.");
-    }
-  });
+
+      } catch {
+        if (mein !== tokenLoesung) return;
+        meldung("Die Datei konnte nicht geladen werden.");
+      }
+
+        });
 
   dlgLoesung.addEventListener("close", () => {
     tokenLoesung++;
