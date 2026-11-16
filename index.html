@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0f1c3a">
+  <title>Adventskalender</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="kopf">
+    <h1 id="titel"></h1>
+    <p id="untertitel"></p>
+  </header>
+
+  <!-- Passwort-Tor -->
+  <section id="tor" class="tor">
+    <form id="tor-form" class="karte tor-karte">
+      <h2>Passwort eingeben</h2>
+      <p id="tor-text" class="intro"></p>
+      <input type="password" id="pw" autocomplete="current-password" placeholder="Passwort" aria-label="Passwort" required>
+      <label class="merken"><input type="checkbox" id="merken" checked> Auf diesem Gerät merken</label>
+      <button type="submit" id="tor-btn" class="btn">Kalender öffnen</button>
+      <p id="tor-fehler" class="status" role="alert"></p>
+    </form>
+  </section>
+
+  <div id="bereich" hidden>
+    <main>
+      <ol id="kalender" class="kalender"></ol>
+    </main>
+    <footer id="fuss" class="fuss"></footer>
+  </div>
+
+  <p id="hinweis" class="hinweis" role="status" aria-live="polite"></p>
+
+  <!-- Fenster 1: Audio -->
+  <dialog id="tuerchen-dialog" aria-labelledby="tuerchen-ueberschrift">
+    <div class="karte">
+      <button type="button" class="zu" data-close aria-label="Schließen">&times;</button>
+      <p id="tuerchen-tag" class="tag"></p>
+      <h2 id="tuerchen-ueberschrift"></h2>
+      <p id="tuerchen-intro" class="intro"></p>
+      <audio id="player" controls preload="metadata"></audio>
+      <p id="audio-status" class="status" aria-live="polite"></p>
+      <button type="button" id="aufloesung-btn" class="btn">Auflösung</button>
+    </div>
+  </dialog>
+
+  <!-- Fenster 2: Auflösung (Video oder Foto + Text) -->
+  <dialog id="aufloesung-dialog" class="breit" aria-labelledby="aufloesung-ueberschrift">
+    <div class="karte">
+      <button type="button" class="zu" data-close aria-label="Schließen">&times;</button>
+      <h2 id="aufloesung-ueberschrift"></h2>
+      <div id="medien" class="medien"></div>
+      <p id="aufloesung-text" class="text"></p>
+    </div>
+  </dialog>
+
+  <script src="einstellungen.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

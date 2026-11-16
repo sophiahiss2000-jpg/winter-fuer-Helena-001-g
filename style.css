@@ -1,0 +1,348 @@
+:root {
+  --nacht: #0f1c3a;
+  --nacht-hell: #1d3260;
+  --frost: #eaf0fa;
+  --tinte: #14213d;
+  --kerze: #ffc15e;
+  --kerze-hell: #ffe2a3;
+  --beere: #8c2f39;
+  --beere-dunkel: #66202b;
+  --schiefer: #34415f;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html { color-scheme: dark; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--serif);
+  color: var(--frost);
+  background:
+    radial-gradient(1.5px 1.5px at 8% 12%, rgba(255,255,255,.85), transparent),
+    radial-gradient(1px 1px at 22% 30%, rgba(255,255,255,.6), transparent),
+    radial-gradient(2px 2px at 37% 8%, rgba(255,255,255,.8), transparent),
+    radial-gradient(1px 1px at 51% 22%, rgba(255,255,255,.55), transparent),
+    radial-gradient(1.5px 1.5px at 66% 14%, rgba(255,255,255,.8), transparent),
+    radial-gradient(1px 1px at 78% 34%, rgba(255,255,255,.6), transparent),
+    radial-gradient(2px 2px at 91% 10%, rgba(255,255,255,.8), transparent),
+    radial-gradient(1px 1px at 14% 62%, rgba(255,255,255,.5), transparent),
+    radial-gradient(1.5px 1.5px at 85% 70%, rgba(255,255,255,.6), transparent),
+    radial-gradient(1px 1px at 45% 88%, rgba(255,255,255,.5), transparent),
+    linear-gradient(180deg, var(--nacht), var(--nacht-hell));
+  background-attachment: fixed;
+}
+
+/* ---------- Kopf ---------- */
+.kopf {
+  text-align: center;
+  padding: 48px 20px 28px;
+}
+.kopf h1 {
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 3.4rem);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: .01em;
+}
+.kopf p {
+  margin: 12px 0 0;
+  font-size: clamp(1rem, 2.6vw, 1.25rem);
+  color: var(--kerze-hell);
+  font-style: italic;
+}
+
+/* ---------- Kalender-Raster ---------- */
+.kalender {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0 16px 40px;
+  max-width: 1000px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+@media (min-width: 640px) {
+  .kalender { grid-template-columns: repeat(6, 1fr); gap: 18px; }
+}
+
+.tuer {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  perspective: 700px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.licht,
+.blatt {
+  position: absolute;
+  inset: 0;
+  border-radius: 50% 50% 8px 8px / 32% 32% 8px 8px;
+}
+
+/* Das Licht hinter der Tür */
+.licht {
+  display: grid;
+  place-items: end center;
+  padding-bottom: 12%;
+  background: radial-gradient(circle at 50% 75%, var(--kerze-hell), var(--kerze) 70%);
+  color: var(--tinte);
+  font-size: clamp(1rem, 3.4vw, 1.4rem);
+  box-shadow: 0 0 24px rgba(255, 193, 94, .35);
+}
+
+/* Die Tür selbst */
+.blatt {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(160deg, var(--beere), var(--beere-dunkel));
+  font-size: clamp(1.5rem, 5.6vw, 2.3rem);
+  transform-origin: left center;
+  transition: transform .6s cubic-bezier(.2, .7, .2, 1);
+  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, .12);
+  backface-visibility: hidden;
+}
+.blatt::before {
+  content: "";
+  position: absolute;
+  inset: 9% 11% 7%;
+  border-radius: 50% 50% 4px 4px / 28% 28% 4px 4px;
+  border: 1px solid rgba(255, 255, 255, .22);
+}
+.blatt::after {
+  content: "";
+  position: absolute;
+  right: 11%;
+  top: 56%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--kerze);
+}
+.blatt .nr { position: relative; }
+
+.tuer.offen .blatt { transform: rotateY(-105deg); }
+
+/* Noch nicht freigeschaltet */
+.tuer.gesperrt { cursor: not-allowed; }
+.tuer.gesperrt .blatt {
+  background: linear-gradient(160deg, #3d4b6c, var(--schiefer));
+  color: rgba(234, 240, 250, .55);
+}
+.tuer.gesperrt .blatt::after { background: rgba(234, 240, 250, .35); }
+
+/* Heutiges Türchen */
+.tuer.heute:not(.offen) .blatt { animation: glimmen 2.4s ease-in-out infinite; }
+@keyframes glimmen {
+  0%, 100% { box-shadow: inset 0 0 0 3px rgba(255,255,255,.12), 0 0 0 0 rgba(255,193,94,0); }
+  50%      { box-shadow: inset 0 0 0 3px rgba(255,255,255,.12), 0 0 26px 5px rgba(255,193,94,.6); }
+}
+
+.tuer.wackeln { animation: wackeln .4s; }
+@keyframes wackeln {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.tuer:focus-visible { outline: none; }
+.tuer:focus-visible .blatt,
+.tuer:focus-visible .licht {
+  outline: 3px solid var(--kerze);
+  outline-offset: 4px;
+}
+
+/* ---------- Fuß & Hinweis ---------- */
+.fuss {
+  text-align: center;
+  padding: 0 20px 40px;
+  color: rgba(234, 240, 250, .7);
+  font-style: italic;
+}
+
+.hinweis {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translate(-50%, 20px);
+  margin: 0;
+  max-width: 90vw;
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: var(--frost);
+  color: var(--tinte);
+  font-family: var(--sans);
+  font-size: .95rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s, transform .25s;
+  z-index: 10;
+}
+.hinweis.sichtbar { opacity: 1; transform: translate(-50%, 0); }
+
+/* ---------- Fenster ---------- */
+dialog {
+  width: 100%;
+  max-width: min(480px, 92vw);
+  max-height: 92vh;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--tinte);
+  overflow: visible;
+}
+dialog.breit { max-width: min(720px, 94vw); }
+dialog::backdrop { background: rgba(8, 14, 30, .8); }
+
+dialog[open] { animation: auf .3s ease-out; }
+@keyframes auf {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.karte {
+  position: relative;
+  max-height: 92vh;
+  overflow: auto;
+  padding: 32px 26px 26px;
+  border-radius: 20px;
+  background: var(--frost);
+  box-shadow: 0 0 0 4px var(--kerze), 0 20px 60px rgba(0, 0, 0, .5);
+}
+
+.zu {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(20, 33, 61, .08);
+  color: var(--tinte);
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.zu:hover { background: rgba(20, 33, 61, .16); }
+
+.tag {
+  margin: 0 0 4px;
+  color: var(--beere);
+  font-style: italic;
+}
+.karte h2 {
+  margin: 0 40px 12px 0;
+  font-size: 1.7rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.intro { margin: 0 0 18px; line-height: 1.5; max-width: 60ch; }
+
+audio { display: block; width: 100%; }
+.status {
+  min-height: 1.4em;
+  margin: 10px 0 14px;
+  font-family: var(--sans);
+  font-size: .9rem;
+  color: #46526f;
+}
+
+.btn {
+  display: block;
+  width: 100%;
+  padding: 14px 20px;
+  border: 2px solid var(--kerze);
+  border-radius: 999px;
+  background: var(--kerze);
+  color: var(--tinte);
+  font: 600 1.05rem var(--serif);
+  cursor: pointer;
+  transition: transform .15s, background .15s;
+}
+.btn:hover:not(:disabled) { transform: translateY(-1px); background: var(--kerze-hell); }
+.btn:disabled {
+  background: transparent;
+  border-color: rgba(20, 33, 61, .25);
+  color: rgba(20, 33, 61, .45);
+  cursor: not-allowed;
+}
+.btn:focus-visible, .zu:focus-visible { outline: 3px solid var(--tinte); outline-offset: 3px; }
+
+.medien { margin: 0 0 16px; }
+.medien video,
+.medien img {
+  display: block;
+  width: 100%;
+  max-height: 62vh;
+  object-fit: contain;
+  border-radius: 12px;
+  background: #0a1226;
+}
+.medien .fehler {
+  margin: 0;
+  padding: 24px;
+  border-radius: 12px;
+  background: rgba(20, 33, 61, .08);
+  font-family: var(--sans);
+  text-align: center;
+}
+.text {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  white-space: pre-line;
+  max-width: 62ch;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+/* ---------- Passwort-Tor ---------- */
+[hidden] { display: none !important; }
+
+.tor {
+  display: flex;
+  justify-content: center;
+  padding: 0 16px 60px;
+}
+.tor-karte { width: 100%; max-width: 380px; color: var(--tinte); }
+.tor-karte h2 { margin: 0 0 8px; }
+.tor-karte input[type="password"] {
+  display: block;
+  width: 100%;
+  margin: 0 0 12px;
+  padding: 13px 16px;
+  border: 2px solid rgba(20, 33, 61, .25);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--tinte);
+  font: 1rem var(--sans);
+}
+.tor-karte input[type="password"]:focus-visible {
+  outline: 3px solid var(--kerze);
+  border-color: var(--tinte);
+}
+.merken {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 16px;
+  font: .92rem var(--sans);
+}
+.tor-karte .status { margin: 12px 0 0; color: var(--beere); }
