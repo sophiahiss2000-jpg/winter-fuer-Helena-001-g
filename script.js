@@ -36,9 +36,19 @@
 
   /* ---------- Entschlüsselte Medien laden ---------- */
   const MIME = {
-    m4a: "audio/mp4", mp3: "audio/mpeg", mp4: "video/mp4", webm: "video/webm",
-    jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp", gif: "image/gif"
-  };
+  m4a: "audio/mp4",
+  mp3: "audio/mpeg",
+
+  mp4: "video/mp4",
+  mov: "video/quicktime",
+  webm: "video/webm",
+
+  jpg: "image/jpeg",
+  jpeg: "image/jpeg",
+  png: "image/png",
+  webp: "image/webp",
+  gif: "image/gif"
+};
   const cache = new Map();
 
   function medium(pfad) {
@@ -315,7 +325,12 @@
       const url = await medium(d.datei);
       if (mein !== tokenLoesung) return;
 
-      if (d.typ === "video") {
+      const endung = d.datei.split(".").pop().toLowerCase();
+
+        if (
+          d.typ === "video" ||
+          ["mp4", "mov", "webm"].includes(endung)
+        ) { {
         const v = document.createElement("video");
         v.controls = true;
         v.playsInline = true;
